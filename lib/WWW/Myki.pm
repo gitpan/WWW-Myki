@@ -9,7 +9,7 @@ use WWW::Mechanize;
 use HTML::TreeBuilder;
 use Carp qw(croak);
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 sub new {
 	my( $class, %args ) = @_;
@@ -65,7 +65,7 @@ sub cards {
 
 =head1 NAME
 
-WWW::Myki - Perl interface to Myki account management interface
+WWW::Myki - A simple Perl interface to Myki online account management portal
 
 =head1 VERSION 0.01
 
