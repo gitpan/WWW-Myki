@@ -9,7 +9,7 @@ use WWW::Mechanize;
 use HTML::TreeBuilder;
 use Carp qw(croak);
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 sub new {
 	my( $class, %args ) = @_;
@@ -17,11 +17,11 @@ sub new {
 	bless $self, $class;
 	$args{username}	? $self->{username} = $args{username} : croak 'Constructor failed: must specify username';
 	$args{password}	? $self->{password} = $args{password} : croak 'Constructor failed: must specify password';
-	$self->{_mech}	= WWW::Mechanize->new();
+	$self->{_mech}	= WWW::Mechanize->new( ssl_opts => { verify_hostname => 0 } );
 	$self->{_url}	= {
 			base	=> 'https://www.mymyki.com.au/NTSWebPortal/',
 			account	=> 'Registered/MyMykiAccount.aspx?menu=My+myki+account',
-			login	=> 'login.aspx'
+			login	=> 'Login.aspx'
 			};
 	$self->_login;
 	return $self
@@ -74,9 +74,9 @@ WWW::Myki - A simple Perl interface to Myki online account management portal
     use WWW::Myki;
 
     my $myki = WWW::Myki->new(
-				username => 'myusername',
-				password => 'mypassw0rd'
-			);
+                                username => 'myusername',
+                                password => 'mypassw0rd'
+                             );
 
     # Print card number, card holder, Myki money and Myki pass balances
    
@@ -88,9 +88,13 @@ WWW::Myki - A simple Perl interface to Myki online account management portal
     # Print the date, time, service, description and cost of our last 15 transactions
 
     foreach my $trip ( $card->transactions ) { 
-      printf( "%10s %8s %-10s %-20s %-5s\n", $trip->date, $trip->time, 
-              $trip->service, $trip->desc, $trip->debit )
-    } 
+      printf( "%10s %8s %-10s %-20s %-5s\n", 
+              $trip->date, 
+              $trip->time, 
+              $trip->service, 
+              $trip->desc, 
+              $trip->debit )
+    }
       
 =head1 DESCRIPTION
 
